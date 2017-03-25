@@ -88,4 +88,15 @@ Go to your website/users/sign_up (NOTE: YOU MUST RESTART THE SERVER)
 git add --all; git commit -m "Add devise"; git push -u origin master
 
 11
+ADD THE HEADER
+Bootstrap navbar section:
+    http://getbootstrap.com/components/#navbar
+Copy the html, add it to _header.html.erb.
+    app/views/layouts/_header.html.erb
+Render the partial by adding it to application.html.erb:
+    just above the yield stmt, inside the body tags
+Go to your webpage, F12, remove redundant elements.
+    when you done, copy the remaining navbar into _header.
+git add --all; git commit -m "Add blank navbar"; git push -u origin master
+
 
