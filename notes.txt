@@ -36,3 +36,14 @@ run the generator:
     rails generate bootstrap:install static
 git commit:
     git add --all; git commit -m "Add bootstrap"; git push -u origin master
+    
+7
+INSTALL SIMPLEFORM
+source:
+    https://github.com/plataformatec/simple_form
+add simple_form gem:
+    gem 'simple_form'
+run the following command to install it:
+    bundle install
+Run the generator:
+    rails generate simple_form:install
