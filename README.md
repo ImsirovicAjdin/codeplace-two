@@ -7,4 +7,14 @@ rails new estuk // estuk/ folder created,
 cd estuk; rails server -b $IP -p $PORT; 
     it's running, how to get to it?
 click on 'Share' next to gear in c9 workspace, copy the 2nd link, paste in new tab and run
+SAVE FIRST COMMIT: 
+    git init; git add --all; git commit; (not passing -m will open the nano editor to add the commit message)
+    type the commit message
+    CTRL O; [ENTER]; CTRL X (save the message; confirm command; exit nano editor)
+ADD REMOTE REPOSITORY:
+    In github, click new repository, give it a good name and description, then:
+    git remote add origin https://github.com/ImsirovicAjdin/codeplace-two.git
+    git push -u origin master
+
+    
 
