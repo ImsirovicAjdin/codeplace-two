@@ -59,3 +59,33 @@ ADD OUR HOMEPAGE
     Rails.application.routes.draw do
         get 'pages/home'
         root 'pages#home # <-- THIS HERE!
+
+9
+TRY REFRESHING THE WEBSITE, YOU'LL GET THIS ERROR:
+couldn't find file 'twitter-bootstrap-static/bootstrap' with type 'text/css'
+FIX: Restart the server
+
+10
+ADD USERS
+"We are going to use a really amazing gem for user authentication called: devise."
+source:
+    https://github.com/plataformatec/devise
+add gem:
+    gem 'devise'
+install the gem:
+    bundle install
+run the generator for devise, as per the instructions from the documentation:
+    rails generate devise:install
+To finish up the devise installation, we need to setup the default mailer as per instructions on the terminal output.
+    config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+Create the views for the users:
+    rails generate devise:views
+Finally create the users by runnign the devise generator in the terminal:
+    rails generate devise User
+After the creation of the User table, migrate the db:
+    rake db:migrate
+Go to your website/users/sign_up (NOTE: YOU MUST RESTART THE SERVER)
+git add --all; git commit -m "Add devise"; git push -u origin master
+
+11
+
