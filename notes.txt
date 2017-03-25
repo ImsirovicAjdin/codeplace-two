@@ -99,4 +99,16 @@ Go to your webpage, F12, remove redundant elements.
     when you done, copy the remaining navbar into _header.
 git add --all; git commit -m "Add blank navbar"; git push -u origin master
 
+12
+ADD THE DYNAMIC LINKS
+Based on whether or not the user is logged in, add the dynamic links to the navbar.
 
+13
+ADD THE JUMBOTRON
+Navigate and copy:
+    http://getbootstrap.com/components/#jumbotron
+Add it to homepage:
+    ./app/views/pages/home.html.erb
+git add --all; git commit -m "Add jumbotron"; git push -u origin master
+
+14
