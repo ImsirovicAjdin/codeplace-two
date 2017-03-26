@@ -404,9 +404,44 @@ Head over to the documentation and check it out. https://github.com/thoughtbot/p
 After reading the documentation, we are going to add the gem to our gemfile
 gem 'paperclip'
 
+(B): Next, as stated per the documentation, we want to run the PaperClip generator for each attachment we want our books to have. 
+So in the terminal, we run the generator for the book  image:
+    rails generate paperclip book image
+
+And we want to run the generator for the book file/pdf itself, but let's call it resource for convenience reasons, 
+again, in the terminal run the generator for: book resource.
+    rails generate paperclip book resource
+    
+As you may notice from the terminal output, the generator created a migration file. 
+Let's open it up and see what the generator created for us.
+    ./app/db/migrate/...-..._add_attachement_images_to_books.rb
+    
+You see the migration files show us the tables that will be changed if we would run the migration, it will add the attachments of image, and resource, to the books table.
+Everything looks fine, so let's run the migration.
+    rake db:migrate
+
+Now we need to update our Book.rb model, in order to work with PaperClip and the newly migration.
+Open the Book.rb model, and add the has_attached_file statements for both the image and the resource to it. 
+        ./app/models/book.rb
+            class Book < ActiveRecord::Base
+            	belongs_to :user
+            	has_attached_file :image 
+            	has_attached_file :resource
+            end
+
+Because of safety reasons we cannot just upload a file, all attributes for the books model that are passed from the view to our model, pass through the controller. 
+Inside the controller there is a method called book_params, which explicit tells which params are needed and which params are permitted to pass through.
+Let's add the :image, and :resource to this params. 
+
+    ./app/controllers/books_controller.rb
+         params.require(:book).permit(:name, :description, :price, :availability, :author, :image, :resource)
+         
+In the next chapter, we will set up Different Environments, and we are going to make use of the Amazon Web Services to store our files, but for now, finish up and commit our work!
+
+GIT COMMIT "Add paperclip"
 
 
-
+        
 
 
 
