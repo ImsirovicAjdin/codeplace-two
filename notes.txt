@@ -128,3 +128,39 @@ Activate client side validation on the simple_form initializer:
 git add --all; git commit -m "Make devise look better"; git push origin master
 
 15
+GENERATING BOOKS
+
+With one command we can create the whole book scaffold, it's gonna generate all.
+First we gonna think what kind of attributes a book will have:
+    name, author name, description, 2 attachments, 1 preview and 1 resource, & price.
+We're gonna use stripe, and stripe uses a price in cents. $1 = 100 cents.
+SCAFFOLD THE BOOK, start with basic attribs, l8tr we'll add more fields
+    rails generate scaffold book name:string author:string description:text price:integer availability:boolean
+BEFORE RUNNING THE MIGRATION, SET availability FIELD DEFAULT VALUE TO TRUE
+    ./db/migrate/...create_books.rb
+        t.boolean :availability, default: true
+INSIDE views/books, DELETE index.json.builder and show.json.builder (we don't need these files)
+NOW MIGRATE THE DB, this command will create a table named "Books" with 5 columns: name, author, description, price, availability
+    rake db:migrate
+THE SCAFFOLD CREATED A CSS FILE WE DON'T NEED, DELETE IT
+    (X) scaffold.scss
+ADD THE books_path TO OUR VIEWS in _header
+    ./app/views/layouts/_header.html.erb
+ADD THE books_path TO HOMEPAGE TOO
+    <% link_to "Books", books_path, class: "btn btn-primary" %>
+IN OUR pages_controller, ENSURE THE current_user IS REDIRECTED TO THE books_path
+GIT ADD, COMMIT "Add the books scaffold", PUSH
+
+16
+
+
+
+
+
+
+
+
+
+
+
+
