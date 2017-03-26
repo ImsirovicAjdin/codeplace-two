@@ -168,10 +168,41 @@ ON THE 2nd COL, DISPLAY ALL THE BOOK'S ATTRIBUTES
 GIT ADD, COMMIT "Make Show book page look better", PUSH
 
 17
+IMPROVING THE BOOKS INDEX
+Target: Improve index page using a partial.
 
+DELETE ALL BOOK INDEX PAGE CONTENT
+    ./app/views/books/index.html.erb
+ADD BOOTSTRAP-READY CODE in ./app/views/books/index.html.erb
+    .row>.col-md-3>.thumbnail...
+OPEN THE BOOKS PAGE
+    website/books
+ADD THE BOOKS ATTRIBUTES TO THE THUMBNAIL CAPTION
+    test it with dummy content first
+MAKE THE CONTENT DYNAMIC (PULL FROM DB)
+    add book partial: "_book.html.erb" in app/views/books
+RENDER THE PARTIAL FROM ./app/views/books/index.html.erb
+    .row><% render @books %>
+NOTE:
+    Rails knows, that a partial corresponds to a collection. So you could use render @users, if there is a _user partial, or render @tasks with the corresponding _task partial, and rails with automatically render the partial for each book/task/user in the books/tasks/users variable.
+    
+On the books_controller, the index action, the @books variable holds the collection of all books. 
+Now update the _book.html.erb partial with the properties of the book.
+      <p><strong><%= book.name %></strong></p>
+      <p><%= book.price.to_f / 100 %></p>
+We want to image to be 'clickable' and point to that book, so let's update the partial once more.
+    - Make a link_to block containing all the image element, so everything inside the block will link to the book_path.
+    - And add a link_to statement to the title of the book to.
+Add an extra book, just to check if everything works fine.
+    Before you save it, uncheck the available checkbox, to state the book is unavailable.
+    the second book is still showing up, while the state of the book is unavailable. Let's fix this.
+To fix the index page, and have it showing only the available books, we are going to change the index action in the BooksController.
+Open the BooksController, and look for the index action, there you see that the @books variable holds all the Book(s) because of Book.all.
+    CHANGE IT TO Book.where(availability: true)
+Perfect! 
+Now go to your localhost:3000/books  and notice that only the books available are shown in the index page!
 
-
-
+GIT ADD, COMMIT "Make the Books index design look better", PUSH
 
 
 
