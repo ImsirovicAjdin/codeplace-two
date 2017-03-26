@@ -204,6 +204,25 @@ Now go to your localhost:3000/books  and notice that only the books available ar
 
 GIT ADD, COMMIT "Make the Books index design look better", PUSH
 
+18
+IMPROVING THE BOOKS NEW AND EDIT
+localhost:3000/books/new, we want to redesign this form
+(A) Both the NEW and the EDIT action render the same form from within their views.
+Open up the books/edit page, and the books/new page to check it out. 
+So if we want to edit the design for these pages, we have to edit the _form.html.erb partial that is rendered in these pages.
+(B) Now open up the books/_form.html.erb partial, to add classes and make it look and work better. We are also going to add 'validations' to the input fields.
+        ./app/views/books/_form.html.erb
+    Inspect the current changes to the form at localhost:3000/books/new
+(C)  It already looks much better, but we can do a bit more. 
+- Remove the surrounding <div> with the class of 'from-inputs'.
+- Add a <br> line below the description to add some space between the price and description. 
+- Add a <div> around the availability checkbox  with the bootstrap classes: 'checkbox' and 'text-center'.
+- Remove the label from the checkbox, by adding the 'label: false' statement, and put the required validation label to false. 
+(D) As a finishing touch, open up the books/new and books/edit views again, and add a text-center class to the h1 title.
+        ./app/views/books/new.html.erb
+GIT ADD, COMMIT "Make the New and Edit view look better", PUSH
+
+19
 
 
 
