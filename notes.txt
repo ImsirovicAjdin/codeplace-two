@@ -223,6 +223,42 @@ So if we want to edit the design for these pages, we have to edit the _form.html
 GIT ADD, COMMIT "Make the New and Edit view look better", PUSH
 
 19
+ADDING BOOKS USER ASSOCIATION
+(TARGET): Before we can make our dashboard, we need to make sure that books are related to users.
+We are going to create the relation between the Books with a User. 
+This means we are making associations, in our case we could say it in plain English.
+"A user owns a book, and a book belongs to a user." 
+(A): Let's start by making a migration by running the migration command, and add a user_id to the Books table. 
+    rails generate migration AddUserIdToBooks user_id:integer
+(B): It's good practice to open up the migration file and inspect if everything is as we wanted.
+    ./app/db/migrate/......_...._add_user_id_to_books.rb
+(C): If everything looks fine, we can run the migration.
+    rake db:migrate
+(D): Next we need to modify the User.rb model. Recall that we could say "A user owns a book"? 
+In our case, a user can even own many books. 
+This association is declared as follows:
+    has_many :books
+(E): And of course, the Book.rb needs to be updated as well. 
+The book belongs to a User, so let's add this relationship to the Books model.
+    ./app/models/book.rb
+        class Book < ActiveRecord::Base
+            belongs_to :user
+        end
+(F): Now we need to modify the way a book is created, to be sure that the book created is made by the user that is currently logged in.
+The way to do that, is to open up the BooksController, and look for the create action. 
+    ./app/models/controllers/books_controller.rb
+      def create
+    @book = current_user.books.new(book_params)
+(G): To ensure only an authenticated user can use the create action, we are going to use the before_action that comes with the devise gem. 
+The before action doesn't need to be on the index action, because non-logged in users should be able to visit the book's index. 
+So let's set the before_action only to the new, edit, create, and update actions.
+    ./app/controllers/books_controller.rb
+        # Ensure the user is logged in.
+        before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy]
+You can check if this works, by opening an incognito browser window, or clear the current sessions, and then visit the localhost:3000/books/new page. 
+GIT ADD, COMMIT "Add book-user association"
+
+
 
 
 
