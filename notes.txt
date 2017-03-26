@@ -386,6 +386,24 @@ You can also check to see our exception message from the ApplicationController w
 Everything works perfect, so we can now commit our changes and then push it to GitHub.
 git commit -m "Added flash Notification"
 
+23
+INSTALL IMAGEMAGICK
+
+For this recipe we are going to use the paperclip gem, but before we can use that, we need to install a very important component called: ImageMagick.
+Make sure ImageMagick is installed on your machine before you continue to the next step. 
+For instructions on how to install it, please use these links for your operating system.
+"How to install imagemagick on c9" https://community.c9.io/t/install-imagemagick/3608
+        *if !works, start with this ln* sudo add-apt-repository main
+        sudo apt-get update
+        sudo apt-get install imagemagick
+
+24
+INSTALL PAPERCLIP
+To add Images and other recourses to our books we are going to use a very awesome gem made by the guys from Thoughbot, called PaperClip.
+Head over to the documentation and check it out. https://github.com/thoughtbot/paperclip
+After reading the documentation, we are going to add the gem to our gemfile
+gem 'paperclip'
+
 
 
 
