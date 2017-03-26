@@ -314,11 +314,55 @@ Go back to the dashboard page, and open up a block for the @books variable, and 
 Finally, add and commit your changes and then push it to GitHub.
 COMMENT "Created the dashboard"
 
-
-
-
-
-
+21
+AUTH USING CANCAN
+TARGET:
+We are going to use a new concept called authorization, because we have an issue with the way how are edit, update and destroy actions are now designed.
+First, start your server, open the browser and create a new User, and with the new User lets's create a New Book. 
+Start the server, open your browser and create a New User.
+As you're logged in as the second user, create a New book. 
+The images will be the same, we are going to handle that later, but for now make sure you have 2 different books, belonging too 2 different users.
+When done correctly, we can now go to each book, and if we modify the url in the browser, we can also edit each book.
+Try it out, visit each book, and alter the url. 
+This should not be possible!
+Since we are logged in as the second user, we should not be able to edit any book that we do not own. 
+To solve this issue, we are going to make use of an amazing gem by the great Ryan Bates, called: cancan.
+Go over to Github and check out the documentation for the CanCan gem.
+If you have done so, it's time to add it to our gemfile. 
+(A): gem 'cancan'
+(B): After saving the gemfile, run the bundle install command.
+(C): Now that the CanCan is properly installed we need to run a generator, as explained in the documentation.   This generator will create the Ability Model. 
+        rails generate cancan:ability
+(D): Open the newly generated Ability.rb model, and look for the line that initializes a User if there is none. 
+We want to uncomment this line.
+    ./app/models/ability.rb
+        user ||= User.new # guest user (not logged in)
+(E): The Books controller has several actions, some of them should be only available to the owner of the book. Others, like the index, should also be available for visitors that are not signed in. 
+Let's start by making :read available for all visitors.
+    ./app/models/ability.rb
+        can :read, :all
+(F): Next we want only users who own the book to be able to :manage the books.
+For this, we create a block that will try and see if the user of the book is the same as the current user. 
+        can :manage, Book do |book| 
+                book.try(:user) == user 
+            end
+If we now test this in our browser, you'll notice nothing has changed!
+In order to have our ability's implemented we need to specify them in our controller.
+(G): Open your BooksController and add the authorize! method to the edit, update, and destroy action to let CanCan handle the authorization.     ./app/controller/books_controller.rb
+            (just under the 'def create' and 'def destroy')
+Why don't we apply this to the new/create actions? That is because these actions apply when there is not a book yet, so having authorization on these actions would be useless.
+Everything looks fine, so it's time to test our application and see if we can edit a book that we don't own.
+Restart your server, login as the first user, and visit the second book (belonging to the second user) and visit the edit page for that book.
+ restart your server before testing our new functionality!
+    SHOULD SEE CANCAN::AccessDenied
+Perfect, our authorization works!
+The final thing we want to change is the error message we are now getting.
+(H): Let's fix that error message, and prevent our visitors from seeing this. 
+We are also going to add an notice: "message" statement, that we will use in the next chapter when we add Flash Messages to our app.
+But first, open the ApplicationController.rb, and create a rescue statement, that will catch the exceptions that CanCan will throw us, and have the user redirected to the home page. 
+As stated, the additional notice: will be used in the next paragraph.
+If we now visit the edit page again, we are redirected to the Root off our application!
+GIT A, C "Add auth", PUSH
 
 
 
