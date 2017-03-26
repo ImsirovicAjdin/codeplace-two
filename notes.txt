@@ -258,6 +258,68 @@ So let's set the before_action only to the new, edit, create, and update actions
 You can check if this works, by opening an incognito browser window, or clear the current sessions, and then visit the localhost:3000/books/new page. 
 GIT ADD, COMMIT "Add book-user association"
 
+20
+CREATING THE DASHBOARD
+We now have a book-and-user association, so it's time to start managing them. 
+Let's do that by adding a dashboard to our application!
+
+(A): In order to arrange the dashboard we need a link in our header to point to the dashboard, but it should be only available for the logged in user. 
+Let's add the dashboard action to the PagesController
+    ./app/controllers/pages_controller.rb
+          def dashboard
+            end
+(B): Also we need to create a view for our dashboard.
+create a new file:   app/views/pages/dashboard.html.erb 
+    Just put any text in the view, like "Hello world",  to test it out.
+
+(C): To be able to view the dashboard, we have to configure the route for it.
+The way to do this is to open up the routes.rb file, and add the dashboard action to match the get request, and point it to the pages controller with the dashboard action.
+    ./app/config/routes.rb
+        get 'dashboard' => 'pages#dashboard'  
+You should now be able to visit the dashboard, located at the localhost:3000/dashboard
+
+(D): Let's make sure only logged in users can access the dashboard. 
+    ./app/controllers/pages_controller.rb
+        # make sure users are logged in.
+        before_action :authenticate_user!, only: [:dashboard]
+(E): This would be a good time to add the dashboard link to our header partial.
+Open up the _header.html.erb and also the terminal, because we need to find out which path we should use for the dashboard.
+In your terminal, run the rake routes command.
+As you see, right at the bottom of the terminal output we can see the that the 'get' action for the dashboard route points to pages#dashboard.
+Our link then should be dashboard_path, let's add it to our _header partial, inside of a list item, add a link_to with the title "dashboard" and the path of dashboard_path.
+(F): We can now make our dashboard more functional, let's start by removing the "hello world", and add some bootstrap elements to arrange the view. The dashboard will hold 3 columns, one with a table for My Books, one with the books Purchased by that user, and the last would be the books that the current user has Sold. 
+We can do that by adding a row, and divide that into 3 x <div> col-md-4. 
+Start with a row, add a h1-text-center with the title "Dashboard", and add the 3 columns.
+    .row>h1.text-center{Dashboard}+.col-md-4*3
+(G): Now add some titles to each column, Books, Purchased, and Sales.
+Also, add a button to create a new book in the first column. 
+        ./app/views/pages/dashboard.html.erb
+Check out your dashboard, and see if all looks fine.
+(H): Now, go over to the bootstrap site, and check out the documentation for tables.
+For our application, the condensed table would be the best fit.
+Open up your browser inspector, and copy the <table class> with all its contents to your dashboard, and paste it right below the h3 tag.
+(I): Go back to your browser and check if your table looks anything like the one you copied from the bootstrap pages.
+Next, edit the table head <th> and table data <td> to the proper attributes of our book.
+We want to have the Id, Name and Availability of the book, and an extra <th> for the actions. Also, we can delete the last two rows since we are not going to use them. 
+
+(J): Now make this dynamic, to do this we need our dashboard to have a variable with our books.
+Open the PagesController.
+Add a variable to the dashboard, called @books, and let's get all the books for the current_user and pass it to that variable.
+        ./app/controllers/pages_controller.rb
+            @books = current_user.books
+(K): We want all of our books to be on their own table row <tr>, so each book in the books variable should be in its own element. 
+Go back to the dashboard page, and open up a block for the @books variable, and pass each attribute to the correspondent table. 
+(L): Let's make the book title a link to the book, and add the edit action to the empty last table data column <td>
+(M): Go back to the browser and see you new made dashboard!
+Finally, add and commit your changes and then push it to GitHub.
+COMMENT "Created the dashboard"
+
+
+
+
+
+
+
 
 
 
