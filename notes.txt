@@ -152,8 +152,22 @@ IN OUR pages_controller, ENSURE THE current_user IS REDIRECTED TO THE books_path
 GIT ADD, COMMIT "Add the books scaffold", PUSH
 
 16
+CUSTOMIZING THE BOOK SHOW
+The target is to customize the way a book looks
 
+CREATE A NEW BOOK
+    website/books/new # 'add the book'
+REMOVE THE GENERATED HTML FOR THE BOOKS SHOW PAGE
+    ./app/views/books/show.html.erb
+AND REPLACE IT WITH 2 BOOTSTRAP COLUMNS
+    .container>.row>.col-md-6+.col-md-6
+COPY AN IMG FILE, PLACE IT AS "book.jpg" in app/assets/images
+ON THE 1st COL, MAKE image_tag FOR THE BOOK COVER
+    ./app/views/books/show.html.erb
+ON THE 2nd COL, DISPLAY ALL THE BOOK'S ATTRIBUTES
+GIT ADD, COMMIT "Make Show book page look better", PUSH
 
+17
 
 
 
