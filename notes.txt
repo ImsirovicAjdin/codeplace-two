@@ -112,3 +112,19 @@ Add it to homepage:
 git add --all; git commit -m "Add jumbotron"; git push -u origin master
 
 14
+MAKE DEVISE VIEWS LOOK NICER
+Create a stylesheet named devise.css.scss:
+    ./app/assets/stylestheets/devise.css.scss
+Apply the created classes to your sign_in form:
+    .app/views/devise/sessions/new.html.erb
+The same for the sign_up form:
+    ./app/views/devise/registrations/new.html.erb
+The same for the reset_password form:
+    ./app/views/devise/passwords/new.html.erb
+The same for the edit/registrations page:
+    ./app/views/devise/registrations/edit.html.erb
+Activate client side validation on the simple_form initializer:
+    ./app/config/initializers/simple_form.rb
+git add --all; git commit -m "Make devise look better"; git push origin master
+
+15
