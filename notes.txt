@@ -364,6 +364,30 @@ As stated, the additional notice: will be used in the next paragraph.
 If we now visit the edit page again, we are redirected to the Root off our application!
 GIT A, C "Add auth", PUSH
 
+22
+FLASH MESSAGES
+Now we will add alerts and messages to our application, to notice our users if there is something wrong or just alert every time something important happens. 
+Rails has a built-in flash method, that can easily use the Bootstrap #Alert component.
+The flash messages will be used in our HTML throughout the entire application, so for that reason we could either use a _partial, but the best way for now is to simply add it to the application.html.erb file. 
+So let's open up the application.html.erb file and add our flash messages.
+(A): ./app/views/layouts/application.html.erb
+		<%= render "layouts/header" %>
+	
+		<% flash.each do |type, message| %>
+		<% end %>
+As you can see by the block that we created for the flash method, each flash method comes with 2 attributes. A Type, and the Message itself.  
+For this chapter, we are only going to use the message itself, but if you recall from our previous chapter you know that we can easily add the type of notice: or alert: .
+
+(B): Continue with the flash iteration, by adding the bootstrap <div> and classes, and finally the message itself. 
+We want the alert to be of the bootstrap type info and have it fade-in. Also, we want to have a button to close it. Luckely bootstrap comes with a great javascript function to close this alert.
+        ./app/views/layouts/application.html.erb
+(C): Everything is in place, so go over to the browser, and log in or log out to see your new message. 
+You can also check to see our exception message from the ApplicationController we made earlier. Try to edit the book from the other user! 
+Everything works perfect, so we can now commit our changes and then push it to GitHub.
+git commit -m "Added flash Notification"
+
+
+
 
 
 
