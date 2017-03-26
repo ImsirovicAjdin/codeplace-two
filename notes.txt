@@ -440,8 +440,39 @@ In the next chapter, we will set up Different Environments, and we are going to 
 
 GIT COMMIT "Add paperclip"
 
+25
+WORKING WITH DIFFERENT ENVIRONMENTS
 
+We are developing our application local, and as soon as we are done we could push it to Heroku for deployment. 
+It's good practice to separate the assets between the environments, and for our images and resources we will use a very cool service from Amazon called S3.
+But before we can do that, we have to set up our environment variables, and way to separate them. 
+
+(A): We are going to make use of a very useful app called: dotenv-rails.
+This will serve the contents of a .env file local, so we don't have to manually export them every time. 
+To do this, add the gem to our gemfile, and run the bundle install.
+Notice we specified the use of the gem to the development group only.
+https://github.com/bkeepers/dotenv
+
+gem 'dotenv-rails', groups: [:development]
         
+        bundle install
+
+(B): Now we have to ability to separate environment files, even throughout different apps.
+Maybe this seems a bit complex, but you'll find out very soon what these variables do.
+So, following the instructions from the dotenv documentations, we have to create a .env file in the root of our application.
+You can create it within your editor, or by using a very nifty terminal command like this.
+touch .env
+by default all files beginning with a . are hidden, so to see them in your terminal you'll need to do as follows: ls -al 
+
+(C): Although all files beginning with a . are hidden, Git will still track any changes made to it.
+If we would now run the usual git add --all we will start tracking our .env file.
+Even worse, when we would push the code to GitHub our credentials would be in the open en for everybody to use... bad idea!
+Open the (also hidden) .gitignore file in your editor, and add the .env file to the bottom of it.
+Save the file, and run git status again in the terminal.
+Perfect! Time to commit our work, and safely push it to GitHub.
+
+GIT COMMIT "Add dotenv"
+
 
 
 
