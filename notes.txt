@@ -473,8 +473,169 @@ Perfect! Time to commit our work, and safely push it to GitHub.
 
 GIT COMMIT "Add dotenv"
 
+26
+SET UP AWS
+
+Step 1
+Go to Amazon and sign up. We are going to use a service called S3 to store our assets.
+
+Step 2
+Go for the S3 Storage & Content Delivery.
+It comes with a free 5 gig starter plan. 
+
+Step 3
+Now create 2 buckets.
+One bucket for the development assets, and one bucket for the production assets.
+Give them appropriate names.
+
+prvibucketdevelopment
+drugibucketproduction
+
+Step 4
+After you have created the buckets, go to your account, and then the Security Credentials.
+
+When prompted, select continue to security credentials.
+
+Step 5
+Select the Access Keys option.
+
+Step 6
+And finally, generate a new pair of keys, hitting the Create New Access Key button.
+Again, you'll be prompted. 
+Download the generate keys and store them somewhere safe. 
+We will need them in the next lecture. 
+
+####################
+27
+S3 STORAGE
+
+Now we have our S3 buckets set up it's time to use them. 
+Let's configure paperclip to use our new storage.
+To do that, we need the Amazon gem, configure PaperClip, and use our credentials with our .environment files.
 
 
+Step 1
+Let's start by adding the aws gem to our gemfile, and run bundle install.
+
+./app/gemfile.rb
+gem 'aws-sdk', '< 2.0 '
+
+bundle install
+
+Step 2
+Now we need to override the default storage for PaperClip.
+We do that simply by adding a configuration for PaperClip to our application.rb file.
+Open the Application.rb, and add the S3 credentials.
+Because we want to use a different bucket for each different environment the application runs, we are going to make use of our environment variables right here.
+./app/config/application.rb
+
+    config.active_record.raise_in_transactional_callbacks = true
+    config.paperclip_defaults = { 
+        storage: :s3,
+        s3_credentials:{
+            bucket: ENV['AWS_BUCKET'],
+            access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+            secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+        }
+    }
+
+Open the .env  to, and add your S3 credentials to this file
+
+./app/.env
+
+AWS_BUCKET=stukdevelopment
+AWS_ACCESS_KEY_ID=1234567890
+AWS_SECRET_ACCESS_KEY=123456890
+
+Step 3
+The final thing we have to do before we can test our new storage, is the ability to upload the files when you either update or create a book.
+Open the books/_form.html.erb partial, and add the fields for the image and resource.
+
+./app/views/books/_form.html.erb
+<%= simple_form_for(@book, html: {class: "form-signin"}) do |f| %>
+  <%= f.error_notification %>
+
+    <%= f.input :name, required: true, label: false, placeholder: "Name", input_html: { class: "form-control"} %>
+    <%= f.input :author, required: true, label: false, placeholder: "Author", input_html: { class: "form-control"} %>
+    <%= f.input :description, required: true, label: false, placeholder: "description", input_html: { class: "form-control"}, rows: 5 %>
+    <%= f.input :price, required: true, label: false, placeholder: "price", input_html: { class: "form-control"} %>
+    
+    <%= f.input :image %>
+    <%= f.input :resource %>
+    
+    <div class="checkbox text-center">
+
+ Step 4
+Now we can restart the server, and go to the books edit or create page, and see if everything works like we expected. 
+rails server
+
+Go over to your localhost:3000/books/new 
+And create a new book, with any image or resource you like.
+When we try to save our book we are getting a big error saying that we are missing required validations!
+
+Step 5
+Of course, for safety reasons, PaperClip requires us to validate the content type before we submit it.
+We simply do that by adding the validations to the Book.rb model, as suggested by the PaperClip documentation.
+
+./app/models/book.rb
+        class Book < ActiveRecord::Base
+        	belongs_to :user
+        	has_attached_file :image 
+        	has_attached_file :resource
+        
+        	validates_attachment_content_type :image, 
+        		content_type:  /^image\/(png|gif|jpeg)/,
+        		message: "Only images allowed"
+        
+            validates :image, attachment_presence: true 
+        end
+
+The above additional validations does two things. 
+First, we validate that the content type is an image of the png/gif/jpeg type, and second it ensures the presence of the image when we try to save the book.
+Let's add the same validations for the resource to, but make it validate the presence and content_type of PDF.
+
+./app/models/book.rb
+        class Book < ActiveRecord::Base
+        	belongs_to :user
+        	has_attached_file :image 
+        	has_attached_file :resource
+        
+        	validates_attachment_content_type :image, 
+        		content_type:  /^image\/(png|gif|jpeg)/,
+        		message: "Only images allowed"
+        	validates_attachment_content_type :resource, 
+        		content_type: ['application/pdf'],
+        		message: "Only pdfs allowed"	
+        
+        	validates :image, attachment_presence: true 
+        	validates :resource, attachment_presence: true 
+        end
+        
+Step 6
+Before we test if the validations work, we need to quit our rails server, and start it again!
+ restart your server
+hit ctrl-c
+and then restart the server
+
+Step 7
+Go back to the browser, and try to create a new book again. 
+Upload any valid image, and pdf, and save the book!
+
+besides the Flash message stating that the book was created, we don't see a different image yet. But still we can check out if the book was successfully saved to S3 or not.
+ Step 8
+To see if the Image was uploaded to S3 successfully, we'll use the console to check it.
+First, quit your rails server by hitting ctrl + c, then run rails c in the terminal to start the console. 
+Alternatively we could log into our amazon account, but using the rails console is much faster.
+In the Rails Console, simply type Book.last.image.url
+
+2.2.0 :001 > Book.last.image.url
+Book Load (0.2ms)  SELECT  "books".* FROM "books"  ORDER BY "books"."id" DESC LIMIT 1
+ => "http://s3.amazonaws.com/estukdevelopment/books/images/000/000/008/original/cover-web.png?1449073262"
+ 
+Step 9
+Our images and recourses are now saved to S3 bucket, and our secret key's are nicely separated throughout the environments. 
+It is time to commit your changes and then push it to GitHub.
+git commit -m "AWS is now configured with paperclip"
 
 
 
